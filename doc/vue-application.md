@@ -97,3 +97,23 @@ app.component("TodoDeleteButton", TodoDeleteButton);
 アプリがマウントされる前に、アプリの設定を確認しよう！
 
 ---
+
+## 複数のアプリケーションのインスタンス
+
+同一ページ内でも、アプリケーションのインスタンスは複数設定可能
+
+`createApp` API は同じページ内で複数の Vue アプリケーションを生成することができる（それぞれが独自の設定やグローバルアセットを備えたスコープを持っている）
+
+```js
+const app1 = createApp({
+  // ...
+});
+app1.mount("#container-1");
+
+const app2 = createApp({
+  // ...
+});
+app2.mount("#container-2");
+```
+
+---
