@@ -43,3 +43,34 @@ const app = createApp(App); // createAppの引数としてルートコンポー�
 `.mount()`メソッドは、全てのアプリの設定やアセットの登録が完了した後、常に呼ばれる必要がある
 
 また、アセット登録するメソッドとは異なり、`.mount()`の戻り値はルートコンポーネントインスタンスである
+
+---
+
+## DOM 内のルートコンポーネントテンプレート
+
+ビルドなしで Vue を扱う場合、ルートコンポーネントのテンプレート（HTML のこと）をマウントコンテナ内に直接書くこともできる
+
+_これは凄く JSX みがある_
+
+また、ルートコンポーネントに`template`オプションが無い場合、Vue はコンテナ（今回は`<div id="app"></div>`）内の`innerHTML`をテンプレートとして使用する
+
+```html
+<div id="app">
+  <button @click="count++">{{ count }}</button>
+</div>
+```
+
+```js
+import { createApp } from "vue";
+
+const app = createApp({
+  // ロジックを直書きしている
+  data() {
+    return {
+      count: 0,
+    };
+  },
+});
+
+app.mount("#app");
+```
