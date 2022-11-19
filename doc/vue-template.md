@@ -93,3 +93,27 @@ HTML 要素の内容をリアクティブにするにはマスタッシュ構文
     }).mount('#app')
 </script>
 ```
+
+---
+
+## ブーリアン属性
+
+属性値を持たない（もしくは、属性値が true もしくは false のみの）属性をブーリアン属性というが、v-bind 下ではブーリアン属性は特別な動作をする
+
+バインドされるプロパティが真値（truthy value）の場合のみ属性が付与され、偽値（falsy value）の場合はレンダリングされない
+
+```js
+<button :disabled="isButtonDisabled">Click</button>
+
+...
+
+createApp({
+    data() {
+        return {
+            isButtonDisabled: true,
+        }
+    }
+}).mount('#app')
+```
+
+---

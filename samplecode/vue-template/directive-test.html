@@ -12,6 +12,7 @@
     <div id="app">
         <p>{{ msg }}</p>
         <p v-bind:style="dynamicStyle">test</p>
+        <button :disabled="isButtonDisabled">Click Me</button>
     </div>
 
     <script type="module">
@@ -21,7 +22,8 @@
             data() {
                 return {
                     msg: "Hello!",
-                    dynamicStyle: "color: red"
+                    dynamicStyle: "color: red",
+                    isButtonDisabled: true,
                 }
             }
         }).mount('#app')
