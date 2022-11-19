@@ -27,3 +27,38 @@ _これ React と違うところなのかな_
 ```
 
 ---
+
+## 生の HTML
+
+マスタッシュ構文の中では、データが HTML ではなくプレーンテキストとして解釈される
+
+本来の HTML を出力する場合は`v-html`ディレクティブを用いる必要がある
+
+```js
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+<div id="app">
+    <p>{{ msg }}</p> // プレーンテキストのまま表示される
+    <p v-html="msg"></p> // テキストが赤く表示される
+</div>
+
+<script type="module">
+    const { createApp } = Vue;
+
+    createApp({
+        data() {
+            return {
+                msg: '<span style="color: red">There is no message!</span>'
+            }
+        }
+    }).mount('#app')
+</script>
+```
+
+`v-html`という属性は、ディレクティブと呼ばれる
+
+ディレクティブは`v-`という接頭辞をもち、Vue によって提供される特別な属性であることを示す（振る舞いや役割りを割り当てられる）
+
+_HTML 書いているみたいに、挙動をコントロールできるってことかな_
+
+---
