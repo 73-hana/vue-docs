@@ -117,3 +117,41 @@ createApp({
 ```
 
 ---
+
+## 複数の属性を動的にバインドさせる
+
+複数の属性をバインドするには、下記のように記述するだけでいい
+
+```js
+<div v-bind="objectOfAttrs"></div>
+```
+
+具体例としては以下の通り
+
+```js
+<div id="app">
+    <button v-bind="redButton">Click Me</button>
+    <button v-bind="blueButton">Click Me</button>
+</div>
+
+<script type="module">
+    const { createApp } = Vue
+
+    createApp({
+        data() {
+            return {
+                redButton: {
+                    style: 'color: red',
+                    disabled: false,
+                },
+                blueButton: {
+                    style: 'color: blue',
+                    disabled: true,
+                },
+            }
+        }
+    }).mount('#app')
+</script>
+```
+
+---

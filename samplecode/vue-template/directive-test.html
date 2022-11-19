@@ -10,9 +10,10 @@
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 
     <div id="app">
-        <p>{{ msg }}</p>
-        <p v-bind:style="dynamicStyle">test</p>
-        <button :disabled="isButtonDisabled">Click Me</button>
+        <p>{{ msg.msg }}</p>
+        <p v-bind:style="msg.dynamicStyle">test</p>
+        <button :disabled="msg.isButtonDisabled">Click Me</button>
+        <button v-bind="objectOfAttrs">Click</button>
     </div>
 
     <script type="module">
@@ -21,9 +22,15 @@
         createApp({
             data() {
                 return {
-                    msg: "Hello!",
-                    dynamicStyle: "color: red",
-                    isButtonDisabled: true,
+                    msg: {
+                        msg: "Hello!",
+                        dynamicStyle: "color: red",
+                        isButtonDisabled: true,
+                    },
+                    objectOfAttrs: {
+                        style: 'color: red',
+                        disabled: true,
+                    }
                 }
             }
         }).mount('#app')
