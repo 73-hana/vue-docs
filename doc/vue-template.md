@@ -62,3 +62,34 @@ _これ React と違うところなのかな_
 _HTML 書いているみたいに、挙動をコントロールできるってことかな_
 
 ---
+
+## 属性バインディング
+
+HTML 要素の内容をリアクティブにするにはマスタッシュ構文が有効だが、HTML 属性の中ではマスタッシュ構文が使えない
+
+代わりに`v-bind`ディレクティブを使用する
+
+```js
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+<div id="app">
+    <p>{{ msg }}</p>
+    <p v-bind:style="dynamicStyle">test</p> // p要素のstyle属性の値をdynamicStyleから取得している
+    <p :style="dynamicStyle">test</p> // v-bindディレクティブは省略可能
+    <p :style="nullData">test</p> // バインドされる値がnullまたは
+    <p :style="undefinedData">test</p> // undefinedの場合は、レンダリングされない
+</div>
+
+<script type="module">
+    const { createApp } = Vue
+
+    createApp({
+        data() {
+            return {
+                msg: "Hello!",
+                dynamicStyle: "color: red"
+            }
+        }
+    }).mount('#app')
+</script>
+```
