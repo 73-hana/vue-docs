@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+    <div id="app">
+        <p>{{ msg.msg }}</p>
+        <p v-bind:style="msg.dynamicStyle">test</p>
+        <button :disabled="msg.isButtonDisabled">Click Me</button>
+        <button v-bind="objectOfAttrs">Click</button>
+    </div>
+
+    <script type="module">
+        const { createApp } = Vue
+
+        createApp({
+            data() {
+                return {
+                    msg: {
+                        msg: "Hello!",
+                        dynamicStyle: "color: red",
+                        isButtonDisabled: true,
+                    },
+                    objectOfAttrs: {
+                        style: 'color: red',
+                        disabled: true,
+                    }
+                }
+            }
+        }).mount('#app')
+    </script>
+</body>
+</html>
