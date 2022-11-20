@@ -89,3 +89,40 @@ function increment() {
 トップレベルのインポートと、`<script setup>`で宣言された変数は、同じコンポーネントのテンプレートで自動的に利用できるようになる
 
 ---
+
+## DOM 更新のタイミング
+
+リアクティブな状態を変化させると、DOM は自動的に更新されるが、その更新は同期的ではない
+
+Vue は更新サイクルの next tick まで更新をバッファリングし、どれだけ状態を変化させても 1 度だけ更新されることを保証してくれる
+
+状態が変化されたあとの DOM 更新を待つため、`nextTick()`というグローバル API を利用できる
+
+## ディープなリアクティビティ―
+
+Vue では、状態はデフォルトでリアクティビティである
+
+入れ子になっている配列やオブジェクトが変化された場合も変更が検出される
+
+```js
+<script setup>
+import { reactive } from "vue";
+
+const obj = reactive({
+  nested: {
+    count: 0,
+  },
+  arr: ["foo", "bar"],
+});
+
+function mutateDeeply() {
+  obj.nested.count++;
+  obj.arr.push("baz");
+}
+</script>
+
+<template>
+  <button @click="mutateDeeply">{{ obj.arr }}</button>
+</template>
+
+```
