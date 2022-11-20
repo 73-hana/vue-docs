@@ -177,3 +177,57 @@ const proxyObj = reactive(rawObj);
 上記のルールはネストされたオブジェクトにも適用されるものである
 
 ---
+
+## `reactive()`の制限
+
+`reactive()`API には２つの制限がある
+
+- オブジェクト型（オブジェクト、配列、map()や set()などのコレクション型）を引数に持つが、プリミティブ型は引数に持てない
+
+- リアクティビティ追跡はプロパティへのアクセスで行われるため、引数に持ったオブジェクト型のアドレスを一定に保つ必要がある（例えば再代入したり、プロパティの値を他の変数に代入したりするとリアクティブなつながりがなくなる）
+
+```vue
+<script setup>
+import { reactive } from "vue";
+
+// 上書きされる恐れがあるので、constを使う
+let state = reactive({
+  count: 0,
+});
+
+function increment() {
+  state.count++;
+}
+
+function overwriteReactive() {
+  state = reactive({
+    count: 1,
+  });
+}
+
+let n = state.count;
+function incrementN(n) {
+  return n++;
+}
+
+function addone(number) {
+  return number++;
+}
+</script>
+
+<template>
+  <div>
+    <p>リアクティブなオブジェクトを置き換えたとき</p>
+    <button @click="increment">Click count: {{ state.count }}</button>
+    <button @click="overwriteReactive">Overwrite</button>
+  </div>
+  <div>
+    <p>リアクティブなオブジェクトのプロパティの扱い</p>
+    <p>Current state.count: {{ state.count }}</p>
+    <button @click="incrementN(n)">increment n</button>
+    <button @click="addone(state.count)">function argment</button>
+  </div>
+</template>
+```
+
+---
