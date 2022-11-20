@@ -126,3 +126,54 @@ function mutateDeeply() {
 </template>
 
 ```
+
+---
+
+## リアクティブプロキシと独自
+
+`reactive()`関数を使用する上で注意すべきなのは、`reactive()`関数の戻り値が元のオブジェクトのプロキシである（つまり、元のオブジェクトと等しくない）ということである
+
+元のオブジェクトがリアクティブになるのではなく、元のオブジェクトのプロキシがリアクティブになるということなので、元のオブジェクトを変更しても DOM の更新は行われない
+
+```vue
+<script setup>
+import { reactive } from "vue";
+
+const rawObject = {
+  count: 0,
+};
+const proxyObject = reactive(rawObject);
+</script>
+
+<template>
+  <div>{{ proxyObject === rawObject ? "same" : "not same" }}</div>
+</template>
+```
+
+また、元のオブジェクトのプロキシに対して改めて`reactive()`関数を呼び出すと、元のプロキシと等しいプロキシが返される
+
+```vue
+<script setup>
+import { reactive } from "vue";
+
+const rawObj = {
+  count: 0,
+};
+const proxyObj = reactive(rawObj);
+</script>
+
+<template>
+  <div>
+    proxyObj and rawObj are
+    {{ proxyObj === rawObj ? "same" : "not same" }}
+  </div>
+  <div>
+    reactive(proxyObj) and proxyObj are
+    {{ reactive(proxyObj) === proxyObj ? "same" : "not same" }}
+  </div>
+</template>
+```
+
+上記のルールはネストされたオブジェクトにも適用されるものである
+
+---
