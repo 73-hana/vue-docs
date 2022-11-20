@@ -1,4 +1,4 @@
 import { createApp } from "vue";
-import Sample from "./reactivitySample02.vue";
+import Sample from "./reactivitySample03.vue";
 
 createApp(Sample).mount("#app");

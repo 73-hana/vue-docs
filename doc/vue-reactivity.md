@@ -59,3 +59,33 @@ export default {
 ```
 
 ---
+
+## <script setup>
+
+`setup()`関数を使って手動で状態やメソッドを取り扱うと冗長化する恐れがある
+
+SFC を利用する場合は`<script setup>`を使用する事で大幅に簡略化することができる
+
+```
+<script setup>
+import { reactive } from "vue";
+
+const state = reactive({
+  count: 0,
+});
+
+function increment() {
+  state.count++;
+}
+</script>
+
+<template>
+  <button @click="increment">
+    {{ state.count }}
+  </button>
+</template>
+```
+
+トップレベルのインポートと、`<script setup>`で宣言された変数は、同じコンポーネントのテンプレートで自動的に利用できるようになる
+
+---
