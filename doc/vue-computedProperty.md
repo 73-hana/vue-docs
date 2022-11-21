@@ -37,3 +37,38 @@ const publishedBooks = computed(() => {
 `computed()`で算出された ref プロパティは、自動的にリアクティブにする範囲を追跡する（たとえば、`publishedBooks`は`author.books`に依存すること察知し、`author.books`の変化も感知できるようになる）
 
 ---
+
+## computed プロパティとメソッド
+
+computed プロパティを使わなくても、コンポーネント内で関数（性格にはメソッド）を持つことで同じ結果を得られる
+
+```vue
+const computedWay = computed(() => { return obj.innerObj.value ? "yes" : "no";
+}) function functionalWay() { return obj.innerObj.value ? "yes" : "no"; }
+```
+
+最終的には、computed プロパティとメソッドの 2 つの方法を使っても、結果は同じである
+
+しかし、computed プロパティはリアクティブな依存関係を参照してキャッシュを残してくれるという違いがある（つまり、computed プロパティにアクセスしても、依存関係先が変更されていなかったら、キャッシュを即座に返すということ）
+
+対照的に、メソッド呼び出しは再描画が起きると常に関数が実行されるようになっている
+
+```vue
+<script setup>
+import { reactive, computed } from "vue";
+
+const today = reactive({ date: Date.now() });
+
+const computedDate = computed(() => today.date);
+function functionalDate() {
+  return today.date;
+}
+</script>
+
+<template>
+  <p>{{ computedDate }}</p>
+  <p>{{ functionalDate() }}</p>
+</template>
+```
+
+---
