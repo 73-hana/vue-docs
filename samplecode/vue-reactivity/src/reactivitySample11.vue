@@ -26,6 +26,9 @@ function overwriteRef() {
     <button @click="increment">Click</button>
   </p>
   <p>now, count.value (count) is {{ count }}</p>
-  <p>execute <code>state.count = otherCount</code><button @click="overwriteRef">Click</button></p>
+  <p>
+    execute <code>state.count = otherCount</code
+    ><button @click="overwriteRef">Click</button>
+  </p>
   <p>now, count.value is {{ count }}</p>
 </template>
