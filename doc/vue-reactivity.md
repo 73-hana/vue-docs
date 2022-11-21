@@ -231,3 +231,67 @@ function addone(number) {
 ```
 
 ---
+
+## `ref()`と共に使うリアクティブな変数
+
+Vue は`reactive()`の制限に対処するため、`ref()`という関数を用意している
+
+`ref()`を用いることで、任意の値の型を保持できるリアクティブな refs を作成できる
+
+`ref()`は引数を（プリミティブ型も可能！）受け取り、それを`.value`プロパティを持つ ref オブジェクトにラップして返す
+
+リアクティブなオブジェクトのプロパティと同様に、`ref()`の`.value`プロパティはリアクティブになる
+
+つまり、`ref()`を使うと、任意の値への参照を作り、リアクティビティを失わずにポインタを受け渡すことができる
+
+```vue
+<script setup>
+import { ref } from "vue";
+
+const count = ref(0);
+
+function increment() {
+  count.value++;
+  console.log(count.value);
+}
+</script>
+
+<template>
+  <button @click="increment">Click me</button>
+</template>
+```
+
+また、引数としてオブジェクト型の値を代入する場合も、オブジェクト全体をリアクティブにすることができる
+
+また、`ref()`で生成されたオブジェクト（ref()の返り値）を他の関数に渡したり、オブジェクトから分解したりしても、リアクティビティは保持されたままである
+
+_ここが`reactive()`との大きな違い_
+
+```vue
+<script setup>
+import { ref } from "vue";
+
+const objRef = ref({
+  count: 0,
+});
+
+function increment() {
+  objRef.value.count++;
+}
+
+function overwriteObjRef() {
+  objRef.value = {
+    count: 0,
+  };
+}
+</script>
+
+<template>
+  <div>
+    <p>refの返り値であるオブジェクトの.valueを書き換える</p>
+    <span>Current count: {{ objRef }}</span>
+    <button @click="increment">Add one</button>
+    <button @click="overwriteObjRef">Caution! Overwrite!</button>
+  </div>
+</template>
+```
