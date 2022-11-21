@@ -295,3 +295,37 @@ function overwriteObjRef() {
   </div>
 </template>
 ```
+
+## テンプレートでの Ref の挙動
+
+ref がテンプレートのトップレベルプロパティとしてアクセスされた場合、それらは自動的にアンラップされる
+
+そのため、`.value`を使用する必要はない
+
+アンラップは、ref がテンプレートに描画されるコンテキスト上のトップレベルのプロパティ（ネストされていない状態）である場合のみ適用される
+
+```vue
+<script setup>
+import { ref } from "vue";
+
+const obj = {
+  foo: ref(0),
+};
+
+const { foo } = obj;
+</script>
+
+<template>
+  <div>
+    <p>refの挙動</p>
+    <p>const obj = { foo: ref(0) };</p>
+    <p>obj.foo + 1 = {{ obj.foo + 1 }}</p>
+    <p>obj.foo.value + 1 = {{ obj.foo.value + 1 }}</p>
+    <hr />
+    <p>const { foo } = obj;</p>
+    <p>foo + 1 = {{ foo + 1 }}</p>
+  </div>
+</template>
+```
+
+---
