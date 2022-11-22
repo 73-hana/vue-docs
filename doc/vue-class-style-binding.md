@@ -55,3 +55,26 @@ const computedObj = computed(() => ({
 ---
 
 ### 配列へのバインディング
+
+`v-bind:class`の属性値にオブジェクトをバインドするところを、配列をバインドすることも可能
+
+```vue
+<script setup>
+import { ref } from "vue";
+
+const activeClass = ref("active");
+const errorClass = ref("text-danger");
+</script>
+
+<template>
+  <p v-bind:class="[activeClass, errorClass]">sample</p>
+</template>
+```
+
+---
+
+### コンポーネントでの利用
+
+一度飛ばす
+
+---
