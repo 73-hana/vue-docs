@@ -1,0 +1,42 @@
+# 条件つきレンダリング
+
+## `v-if`と`v-else`、`v-else-if`
+
+`v-if`ディレクティブは、ブロックを条件に応じてレンダリングしたい場合に使用される
+
+ブロックは、ディレクティブの式が truthy の場合のみレンダリングされる
+
+`v-if`に対応する"else block"を示すために、`v-else`ディレクティブを使用できる
+
+また、"else if block"を示したい場合は`v-else-if`ディレクティブを使用できる
+
+`v-else-if`は`v-if`と`v-else`の間に何度も連結することができる
+
+```vue
+<script setup>
+import { ref } from "vue";
+
+const isAwesome = ref("awesome");
+
+function swichAwesome() {
+  isAwesome.value = "awesome";
+}
+
+function switchSoSo() {
+  isAwesome.value = "so-so";
+}
+
+function switchBad() {
+  isAwesome.value = "bad";
+}
+</script>
+
+<template>
+  <p v-if="isAwesome === 'awesome'">Vue is awesome!</p>
+  <p v-else-if="isAwesome === 'so-so'">Vue is so-so.</p>
+  <p v-else>Vue is not good...</p>
+  <button @click="swichAwesome">Awesome</button>
+  <button @click="switchSoSo">SoSo</button>
+  <button @click="switchBad">Bad</button>
+</template>
+```
