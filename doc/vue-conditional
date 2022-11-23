@@ -40,3 +40,45 @@ function switchBad() {
   <button @click="switchBad">Bad</button>
 </template>
 ```
+
+---
+
+## `<template>`での`v-if`
+
+`v-if`はディレクティブなので、単一の要素に付加する必要があるが、多くの要素をまとめてしまって、それごと表示非表示を切り替えてしまいたいこともある
+
+その場合は、`<template>`要素で`v-if`を使い、`<template>`をラッパーとして使用することができる
+
+---
+
+## `v-show`
+
+`v-if`と同様に要素の表示非表示をつかさどる方法として、`v-show`が用意されている
+
+使用方法はほとんど同じだが、`v-show`で表示非表示を切り替える要素は常にレンダリングされ、`v-if`で表示非表示を切り替える要素は結果次第でレンダリングされるかどうかが決まる
+
+`v-show`要素の挙動はシンプルで、要素の CSS プロパティのうち`display`を切り替えるだけである
+
+```vue
+<script setup>
+import { ref } from "vue";
+
+const isAwesome = ref(true);
+
+function switchAwesome() {
+  isAwesome.value = !isAwesome.value;
+}
+</script>
+
+<template>
+  <p v-show="isAwesome">Vue is awesome!</p>
+  <p v-show="!isAwesome">Vue is not good...</p>
+  <p v-if="isAwesome">React is also awesome!</p>
+  <p v-else>React is not good too...</p>
+  <button @click="switchAwesome">Click</button>
+</template>
+```
+
+---
+
+##
