@@ -64,3 +64,54 @@ const myObject = reactive({
   </ul>
 </template>
 ```
+
+---
+
+## `v-for`で範囲指定を設定する
+
+`v-for`で連続した整数を作成することもできる（その場合は、`v-for`が適用された要素が、その回数だけ繰り返しレンダリングされる）
+
+注意すべき点として、数値は 1 から繰り返される事に注意する
+
+```vue
+<template>
+  <p v-for="n in 10">{{ n }}</p>
+</template>
+```
+
+---
+
+## `<template>`に`v-for`を適用する
+
+テンプレートに`v-if`を適用する場合と同様に、`<template>`タグに`v-for`を適用することができる
+
+---
+
+## `v-for`と`v-if`を組み合わせる場合
+
+同じノードに両方が存在する場合、`v-for`よりも`v-if`のほうが優先順位が高くなる（よって、`v-for`のスコープにある変数は、同じノードにあったとしても`v-if`で使うことは出来ない）
+
+この問題を解決するためには、ラップ用の`<template>`タグを設けて、そこで`v-for`ディレクティブを指定することで解決できる
+
+```vue
+<script setup>
+import { ref } from "vue";
+
+const books = ref([
+  { title: "JavaScript", price: "$15", isAvailable: true },
+  { title: "React", price: "$20", isAvailable: false },
+  { title: "Vue", price: "$20", isAvailable: true },
+]);
+</script>
+
+<template>
+  <p>my favorite books</p>
+  <ul>
+    <template v-for="book in books">
+      <li v-if="book.isAvailable">
+        title: {{ book.title }} ({{ book.price }})
+      </li>
+    </template>
+  </ul>
+</template>
+```
