@@ -35,3 +35,32 @@ const books = ref([
 ```
 
 ---
+
+## `v-for`をオブジェクトに適用する
+
+`v-for`はオブジェクトの各プロパティを反復処理するのにも利用できる
+
+配列と同様に、2 つめのエイリアスを指定するとプロパティのキーを取り出すことができる
+
+また、配列とは異なり、３つ目のエイリアスを指定するとインデックスを取り出すことができる
+
+```vue
+<script setup>
+import { reactive } from "vue";
+
+const myObject = reactive({
+  title: "How to do lists in Vue",
+  author: "John Doe",
+  publishedAt: "2016-04-10",
+});
+</script>
+
+<template>
+  <p>My favorite book</p>
+  <ul>
+    <li v-for="(value, key, index) in myObject">
+      {{ index }} {{ key }}: {{ value }}
+    </li>
+  </ul>
+</template>
+```
