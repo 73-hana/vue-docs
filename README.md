@@ -89,3 +89,68 @@ const attrObj = {
 ---
 
 ## リアクティブ
+
+### reactive()
+
+リアクティブなオブジェクトや配列を作るには`reactive()`関数を利用する。オブジェクトや配列のリアクティビティは、入れ子になったオブジェクトにも適用される。
+
+値をオーバーライドしたり、プロパティの値を他の変数・関数に渡すとリアクティビティが破壊される。
+
+```vue
+<template>
+  <div>
+    <button @click="increment">{{ nestedObj.obj.count }}</button>
+  </div>
+</template>
+
+<script setup>
+import { reactive } from "vue";
+
+const nestedObj = reactive({
+  obj: { count: 0 },
+});
+
+function increment() {
+  nestedObj.obj.count++;
+}
+</script>
+```
+
+### ref()
+
+リアクティブなプリミティブ型やオブジェクト、配列を作るには`ref()`関数を用いる。`reactive()`関数とは異なり、`ref()`で生成されたオブジェクトを他の変数・関数に渡したり、新しい値でオーバーライドしてもリアクティビティは保持されたままになる。
+
+```vue
+<template>
+  <div>
+    <p>refObj.foo: {{ refObj.foo }}</p>
+    <p>detachedNum: {{ detachedNum }}</p>
+    <button @click="increment">increment</button>
+    <button @click="overwriteRefObj">overwriteRefObj</button>
+  </div>
+</template>
+
+<script setup>
+import { ref } from "vue";
+
+let refObj = ref({
+  foo: 1,
+  bar: 2,
+});
+
+let detachedNum = refObj.value.foo;
+
+function increment() {
+  refObj.value.foo++;
+  refObj.value.bar++;
+  detachedNum++;
+}
+
+function overwriteRefObj() {
+  refObj.value = {
+    foo: 100,
+    bar: 100,
+  };
+}
+</script>
+```

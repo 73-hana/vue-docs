@@ -9,9 +9,27 @@
   <VueDirective />
   <VueDynamicDirective />
   <VueModifier />
+  <h2>reactive</h2>
+  <VueReactive />
+  <VueNestedReactive />
+  <VueProxyAndOriginal />
+  <VueReactiveTwice />
+  <VueTwoRestriction />
+  <VueRefMethod />
+  <VueRefKeepingReactivity />
+  <VueAutoUnwrap />
+
 </template>
 
 <script setup>
+import VueAutoUnwrap from "./components/reactive/vue-auto-unwrap.vue";
+import VueNestedReactive from "./components/reactive/vue-nested-reactive.vue";
+import VueProxyAndOriginal from "./components/reactive/vue-proxy-and-original.vue";
+import VueReactiveTwice from "./components/reactive/vue-reactive-twice.vue";
+import VueReactive from "./components/reactive/vue-reactive.vue";
+import VueRefKeepingReactivity from "./components/reactive/vue-ref-keeping-reactivity.vue";
+import VueRefMethod from "./components/reactive/vue-ref-method.vue";
+import VueTwoRestriction from "./components/reactive/vue-two-restriction.vue";
 import VueBinding from "./components/template/vue-binding.vue";
 import VueDirective from "./components/template/vue-directive.vue";
 import VueDynamicDirective from "./components/template/vue-dynamic-directive.vue";
