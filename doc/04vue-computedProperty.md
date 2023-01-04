@@ -2,85 +2,87 @@
 
 ## 基本的な例
 
-テンプレート内に式を書けるのは便利だが、非常に簡単な操作しかできない
+マスタッシュ構文や属性の引用符の中で JS の式を書くことはできるが、非常に簡単な操作しかできない。多くの式を詰め込んでしまうと、可読性が下がり修正しにくくなる。
 
-テンプレート内に多くのロジックを詰め込んでしまうと、コードが長くなり、後々読みにくく修正しにくくなってしまう
-
-リアクティブなデータを含む複雑なロジックには算出プロパティを利用する
+もしリアクティブなデータを含む複雑なロジックを記述したい場合は computed プロパティを使う。
 
 ```vue
+<template>
+  <div>
+    <p>Has published books: {{ publishedBooksMessage }}</p>
+  </div>
+</template>
+
 <script setup>
 import { reactive, computed } from "vue";
 
 const author = reactive({
   name: "John Doe",
-  books: ["Book1 - for beginner", "Book2 - Basic", "Book3 - Advanced"],
+  books: [
+    "Vue 2 - Advanced Guide",
+    "Vue 3 - Basic Guide",
+    "Vue 4 - The Mystery",
+  ],
 });
 
-const publishedBooks = computed(() => {
-  return author.books.length > 0 ? "yes" : "no";
+const publishedBooksMessage = computed(() => {
+  return author.books.length > 0 ? "Yes" : "No";
 });
 </script>
-
-<template>
-  <p>
-    Favorite Books?
-    <span>{{ publishedBooks }}</span>
-  </p>
-</template>
 ```
 
-`computed()`関数は getter 関数が渡される事を想定しており、返り値は算出された ref となる（つまり`publishedBooks`の値と`publishedBooks.value`はおなじ）
+`computed()`関数の返り値は`ref`であるので、`publishedBooks`と`publishedBooks.value`は同じ値を返す。また、マスタッシュ構文内では`.value`は要らない。
 
-また、ref が返り値のため、マスタッシュ構文内では`.value`入らない
+`computed()`関数を用いず、通常の関数でロジックを作る場合、返り値がリアクティブにならない。そのため、返り値もリアクティブにしたい場合は`computed()`を使う必要がある。
 
-`computed()`で算出された ref プロパティは、自動的にリアクティブにする範囲を追跡する（たとえば、`publishedBooks`は`author.books`に依存すること察知し、`author.books`の変化も感知できるようになる）
+また、`computed()`関数で作られた ref は自動的にリアクティブにするべき依存関係を追跡する。例えば、`publishedBooks`は`author.books`に依存することを把握しているため、`author.books`が変わると`publishedBooks`が使われているバインディングを全て更新する。
 
 ---
 
 ## computed プロパティとメソッド
 
-computed プロパティを使わなくても、コンポーネント内で関数（性格にはメソッド）を持つことで同じ結果を得られる
+`computed()`関数を使わなくても、コンポーネント内で関数（メソッド）を使うことで同じ結果を得られる。
+
+`computed()`プロパティはリアクティブな依存関係を把握しているため、リアクティブな依存関係に基づきキャッシュを保持することができる。上記の例の場合は、`author.books`が変化しない限りは`publishedBooks`に何度アクセスしてもキャッシュされた値を返すだけである。
+
+下記の例では、リアクティブな`name`に依存する`introduction`と、リアクティブな依存先がない`now`がある。この場合`now`はキャッシュされた値を返すだけになってしまう。
 
 ```vue
-const computedWay = computed(() => { return obj.innerObj.value ? "yes" : "no";
-}) function functionalWay() { return obj.innerObj.value ? "yes" : "no"; }
-```
-
-最終的には、computed プロパティとメソッドの 2 つの方法を使っても、結果は同じである
-
-しかし、computed プロパティはリアクティブな依存関係を参照してキャッシュを残してくれるという違いがある（つまり、computed プロパティにアクセスしても、依存関係先が変更されていなかったら、キャッシュを即座に返すということ）
-
-対照的に、メソッド呼び出しは再描画が起きると常に関数が実行されるようになっている
-
-```vue
-<script setup>
-import { reactive, computed } from "vue";
-
-const today = reactive({ date: Date.now() });
-
-const computedDate = computed(() => today.date);
-function functionalDate() {
-  return today.date;
-}
-</script>
-
 <template>
-  <p>{{ computedDate }}</p>
-  <p>{{ functionalDate() }}</p>
+  <div>
+    <p>This text depends on ref: {{ introduction }}</p>
+    <p>This text depends on primitive: {{ now }}</p>
+  </div>
 </template>
+
+<script setup>
+import { ref, computed } from "vue";
+
+const name = ref("john doe");
+const introduction = computed(() => {
+  return `My name is ${name.value}`;
+});
+
+const now = computed(() => Date.now());
+</script>
 ```
+
+対してコンポーネント内の関数の場合は呼びだされる度に常に実行される。
+
+よって、常に実行させたい処理（Date メソッドなど）は関数で処理を行い、巨大な配列や多くの計算を処理する場合は`computed()`プロパティを用いるのが良い。
 
 ---
+
+## 書き込み可能な`computed`関数
+
+算出プロパティはデフォルトでは`getter`関数のみを保持している。書き込み可能な`computed()`プロパティを作る場合は明示的に`getter`関数と`setter`関数を定義する必要がある。
 
 ## ベストプラクティス
 
 ### getter 関数は副作用のないものでなければならない
 
-computed プロパティにおける getter 関数は計算のみ行い、副作用が出ないようにする（名前のとおり computed のみ）
+`computed()`プロパティでは値の計算や処理だけを行うのがベターである。非同期リクエストや DOM 操作等を行うのはやめる。役割りをしっかり分担させる。
 
 ### 算出した値の変更を避ける
 
-computed プロパティから戻る値は一時的なスナップショットとして扱うのがよい
-
-ソースが変わる度に新しくなるので、わざわざ手動でスナップショットを改編することはしないでおこう
+`computed()`プロパティはキャッシュを保持する機構のため、戻り値は一時的なスナップショットとして扱うのが良い。依存先が変わる度にスナップショットが更新されるため、わざわざ戻り値を手動で変更する必要がない。

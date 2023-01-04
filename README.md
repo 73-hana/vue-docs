@@ -154,3 +154,45 @@ function overwriteRefObj() {
 }
 </script>
 ```
+
+## computed プロパティ
+
+マスタッシュ構文や属性の引用符の中では 1 つの JS 式しか書けないため、複雑なロジックを記述する場合には`computed()`プロパティを用いる。
+
+`computed()`プロパティはロジックの結果をキャッシュすることができる。一時的なスナップショットを取る機構である。よって、複雑なロジックを実行するのも最小回数で済む。
+
+```vue
+<template>
+  <div>
+    <p>Has published books: {{ publishedBooksMessage }}</p>
+  </div>
+</template>
+
+<script setup>
+import { reactive, computed } from "vue";
+
+const author = reactive({
+  name: "John Doe",
+  books: [
+    "Vue 2 - Advanced Guide",
+    "Vue 3 - Basic Guide",
+    "Vue 4 - The Mystery",
+  ],
+});
+
+const publishedBooksMessage = computed(() => {
+  return author.books.length > 0 ? "Yes" : "No";
+});
+</script>
+```
+
+`computed()`プロパティの場合は、戻り値もリアクティブになる。`computed()`プロパティはリアクティブな依存関係を把握しているため、依存先の変更を感知してキャッシュを更新することができる。
+
+対してテンプレート内の関数の場合は、関数を呼び出すたびに関数が実行されるため、複雑なロジックを都度実行してしまう。
+
+よって、常に実行させたい処理（Date メソッドなど）は関数で処理を行い、巨大な配列や多くの計算を処理する場合は`computed()`プロパティを用いるのが良い。
+
+### `computed()`プロパティのベストプラクティス
+
+- `computed()`プロパティでは、値の計算や処理だけを行い、非同期リクエストや DOM 操作など副作用が発生する処理は行わない。
+- `computed()`プロパティの戻り値をわざわざ変更するのは避ける。変更したい場合は依存先を変更する方が良い。

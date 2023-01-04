@@ -18,10 +18,14 @@
   <VueRefMethod />
   <VueRefKeepingReactivity />
   <VueAutoUnwrap />
-
+  <h2>Computed</h2>
+  <VueComputedProperty />
+  <VueComputedOrFunction />
 </template>
 
 <script setup>
+import VueComputedOrFunction from "./components/computed/vue-computed-or-function.vue";
+import VueComputedProperty from "./components/computed/vue-computed-property.vue";
 import VueAutoUnwrap from "./components/reactive/vue-auto-unwrap.vue";
 import VueNestedReactive from "./components/reactive/vue-nested-reactive.vue";
 import VueProxyAndOriginal from "./components/reactive/vue-proxy-and-original.vue";
